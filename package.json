@@ -1,0 +1,10 @@
+{
+  "name": "teen-expense-tracker",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm --prefix backend ci && npm --prefix frontend ci && npm --prefix frontend run build",
+    "start": "node backend/src/server.js",
+    "test": "npm --prefix backend test"
+  }
+}

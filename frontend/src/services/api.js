@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  // In the Render single-service deployment the UI and API share one origin.
+  // Local development keeps using the standalone backend at port 5000.
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api'),
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json'

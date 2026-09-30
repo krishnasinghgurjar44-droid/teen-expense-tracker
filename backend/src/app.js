@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const env = require('./config/env');
 
 const authRoutes = require('./routes/authRoutes');
@@ -82,6 +83,17 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/budget', budgetRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/profile', profileRoutes);
+
+// Serve the compiled React application when this project is deployed as one
+// Render web service. API requests above keep their /api prefix; every other
+// route is handled by the frontend so React Router can render deep links.
+if (env.isProduction) {
+  const frontendBuildPath = path.resolve(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendBuildPath));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+}
 
 // 404 & Centralized Error Handlers
 app.use(notFoundHandler);
